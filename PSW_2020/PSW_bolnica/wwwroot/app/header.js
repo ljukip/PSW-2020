@@ -47,6 +47,6 @@ Vue.component("top-header", {
         }
       })
     }
-  }
+  },
 
 })

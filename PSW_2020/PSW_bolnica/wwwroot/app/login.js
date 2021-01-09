@@ -27,6 +27,7 @@ Vue.component("login", {
                     </div>
                     <div id="center">
                         <div v-if="error" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong username or password</div>
+                        <div v-if="error===wrongPassword" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong password</div>
                         <button class="button1" type="submit" v-on:click='login(user)'>Login</button> 
                         <button class="button1" v-on:click='cancel()' > Cancel</button> 
                     </div>
@@ -48,7 +49,7 @@ Vue.component("login", {
 
             axios //sending a request for a server to update the user, thus logging the user in
                 //url-which is used for a request, data-data for update (post)
-                .post('rest/login', {
+                .post('login', {
                     username: user.username,
                     password: user.password
                 })
@@ -57,18 +58,16 @@ Vue.component("login", {
         },
 
         succes: function (data) {
-            //if login was a succes, then jason object, username and role are being saved in a local storage(storing in browser) for further use without contanting the server
-            //chek if theres a token (token is being set in the responce)
-            if (!data.jwt) {
-                console.log("proverava jwt");
-                this.failed();
+            if (data == null) {
+                console.log("proverava da li je potvrdjena sifra");
+                this.wrongPassword();
                 return;
             }
             console.log("succes");
             localStorage.setItem('username', data.username);
             localStorage.setItem('password', data.password);
             localStorage.setItem('role', data.role);
-            localStorage.setItem('jwt', data.jwt);
+            //localStorage.setItem('jwt', data.jwt);
 
             this.error = false;
             Swal.fire({
@@ -100,8 +99,15 @@ Vue.component("login", {
 
         failed: function () {
             console.log("bad request");
-            localStorage.removeItem("jwt");
+            //localStorage.removeItem("jwt");
             this.error = true;
+            console.log(this.error);
+            setTimeout(() => this.error = false, 6000);
+        },
+        wrongPassword: function () {
+            console.log("wrong password");
+            //localStorage.removeItem("jwt");
+            this.error = 'wrongPassword';
             console.log(this.error);
             setTimeout(() => this.error = false, 6000);
         }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ljubica\\Desktop\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj": {}
+    "C:\\Users\\Ljubica\\Desktop\\PSW-2020\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ljubica\\Desktop\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj": {
+    "C:\\Users\\Ljubica\\Desktop\\PSW-2020\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ljubica\\Desktop\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj",
+        "projectUniqueName": "C:\\Users\\Ljubica\\Desktop\\PSW-2020\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj",
         "projectName": "PSW_bolnica",
-        "projectPath": "C:\\Users\\Ljubica\\Desktop\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj",
+        "projectPath": "C:\\Users\\Ljubica\\Desktop\\PSW-2020\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj",
         "packagesPath": "C:\\Users\\Ljubica\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ljubica\\Desktop\\PSW_2020\\PSW_bolnica\\obj\\",
+        "outputPath": "C:\\Users\\Ljubica\\Desktop\\PSW-2020\\PSW_2020\\PSW_bolnica\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Ljubica\\AppData\\Roaming\\NuGet\\NuGet.Config",

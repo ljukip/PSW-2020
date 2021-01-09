@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PSW_bolnica.interfaces;
 using PSW_bolnica.services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace PSW_bolnica
 {
@@ -40,7 +41,20 @@ namespace PSW_bolnica
 
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(4);
+                options.Cookie.IsEssential = true;
             });
+            services.AddAuthentication("Authentication")
+                   .AddScheme<AuthenticationSchemeOptions, Authentication>("Authentication", null);
+            
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
+            {
+                options.LoginPath = "/auth/login";
+                options.AccessDeniedPath = "/auth/accessdenied";
+                options.Cookie.IsEssential = true;
+                options.SlidingExpiration = true; // here 1
+                options.ExpireTimeSpan = TimeSpan.FromSeconds(10);// here 2
+            });
+
             //registraton of services used
             services.AddScoped<IUserService, UserService>();
 

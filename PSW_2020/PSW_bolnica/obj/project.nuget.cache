@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "e9dGdYPeylmDqYHKAu4IvA4TxpaZG30fF1mhygoEjzhbvVg7OvuIwD31v0qI9ZIrXOn06EmUWBh73ydk86ph4w==",
+  "dgSpecHash": "JF/363puRnoNuMsR7/32e+vuj+S2BJP8qcdmesw8bDqR8u6MxdxhiEt7afayxSOys8y7wOw913p+1KnCgG9tZg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Ljubica\\Desktop\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj",
+  "projectFilePath": "C:\\Users\\Ljubica\\Desktop\\PSW-2020\\PSW_2020\\PSW_bolnica\\PSW_bolnica.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ljubica\\.nuget\\packages\\castle.core\\4.4.0\\castle.core.4.4.0.nupkg.sha512",
     "C:\\Users\\Ljubica\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\3.1.8\\microsoft.aspnetcore.authentication.jwtbearer.3.1.8.nupkg.sha512",
