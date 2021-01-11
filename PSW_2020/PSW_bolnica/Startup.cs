@@ -17,6 +17,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PSW_bolnica.interfaces;
 using PSW_bolnica.services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace PSW_bolnica
 {
@@ -38,22 +40,7 @@ namespace PSW_bolnica
                      options.UseSqlServer(ConfigurationExtensions.GetConnectionString(Configuration, "DBContextConnectionString")).UseLazyLoadingProxies());
         
             services.AddRazorPages().WithRazorPagesRoot("/Pages");
-
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(4);
-                options.Cookie.IsEssential = true;
-            });
-            services.AddAuthentication("Authentication")
-                   .AddScheme<AuthenticationSchemeOptions, Authentication>("Authentication", null);
-            
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
-            {
-                options.LoginPath = "/auth/login";
-                options.AccessDeniedPath = "/auth/accessdenied";
-                options.Cookie.IsEssential = true;
-                options.SlidingExpiration = true; // here 1
-                options.ExpireTimeSpan = TimeSpan.FromSeconds(10);// here 2
-            });
+            ConfigureAuthentication(services);
 
             //registraton of services used
             services.AddScoped<IUserService, UserService>();
@@ -72,11 +59,23 @@ namespace PSW_bolnica
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseStatusCodePages(context =>
+            {
+                var response = context.HttpContext.Response;
+
+                if (response.StatusCode == (int)System.Net.HttpStatusCode.Unauthorized)
+                {
+                    response.Redirect(string.Format("{0}://{1}{2}",
+                        response.HttpContext.Request.Scheme,
+                    response.HttpContext.Request.Host, "/login"));
+                }
+                return Task.CompletedTask;
+            });
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
 
-            app.UseSession();
+            //app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -84,5 +83,48 @@ namespace PSW_bolnica
                 endpoints.MapRazorPages();
             });
         }
+
+        private void ConfigureAuthentication(IServiceCollection services)
+        {
+
+            var key = Encoding.ASCII.GetBytes(Configuration["AppSettings:JWT:Secret_Key"]);
+
+            services.AddAuthentication(config =>
+            {
+                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            })
+           .AddJwtBearer(config =>
+           {
+               config.RequireHttpsMetadata = false;
+               config.SaveToken = true;
+               config.TokenValidationParameters = new TokenValidationParameters
+               {
+                   ValidateIssuerSigningKey = true,
+                   IssuerSigningKey = new SymmetricSecurityKey(key),
+                   ValidateIssuer = false,
+                   ValidateAudience = false
+               };
+
+               config.Events = new JwtBearerEvents()
+               {
+                   OnMessageReceived = context =>
+                   {
+
+                       if (context.Request.Cookies.TryGetValue("JWT", out string token))
+                       {
+                           context.Token = token;
+                       }
+                       return Task.CompletedTask;
+                   },
+               };
+
+
+           });
+
+
+        }
+
     }
 }

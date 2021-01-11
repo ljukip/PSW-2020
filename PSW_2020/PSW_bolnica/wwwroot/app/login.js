@@ -58,16 +58,11 @@ Vue.component("login", {
         },
 
         succes: function (data) {
-            if (data == null) {
-                console.log("proverava da li je potvrdjena sifra");
-                this.wrongPassword();
-                return;
-            }
-            console.log("succes");
-            localStorage.setItem('username', data.username);
-            localStorage.setItem('password', data.password);
-            localStorage.setItem('role', data.role);
-            //localStorage.setItem('jwt', data.jwt);
+            console.log("succes123");
+
+            deleteCookie("JWT");
+            setCookie("JWT", data, 86400);
+            UpdateUserDataFromJWT();
 
             this.error = false;
             Swal.fire({

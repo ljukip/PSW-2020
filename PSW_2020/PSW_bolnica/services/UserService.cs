@@ -31,7 +31,8 @@ namespace PSW_bolnica.services
 
             //saving in DB
             //dbcontext.Users.ToList().ForEach(user => Debug.WriteLine("user je :" + user.name));
-           
+            newUser.password = Util.SHA512(newUser.password);
+
             dbcontext.user.Add(newUser);
             dbcontext.SaveChanges();
 

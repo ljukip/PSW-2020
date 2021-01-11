@@ -1,8 +1,9 @@
 Vue.component("top-header", {
   data: function () {
+    UpdateUserDataFromJWT();
     return {
       user: {
-        role: localStorage.getItem('role')
+        role: UserData == null ? '' : UserData.role, //localStorage.getItem('role')
       }
     }
   },
@@ -16,7 +17,7 @@ Vue.component("top-header", {
       <a href="#/" v-if="!user.role" data-toggle="tooltip" title="home"><img  src="images/home.png" width="31" height="31"> </a>
       <a href="#/profileUser" v-if="user.role" data-toggle="tooltip" title="profile"><img  src="images/profile.png" width="31" height="31"> </a> 
       <a href="#" v-if="user.role" data-toggle="tooltip" title="appointments"><img  src="images/res.png" width="31" height="31"> </a> 
-      <a href="#" data-toggle="tooltip" title="medical records"><img  src="images/prognosis.png" width="31" height="31"> </a>
+      <a href="#/proba" data-toggle="tooltip" title="medical records"><img  src="images/prognosis.png" width="31" height="31"> </a>
       <a href="#" v-if="user.role ==='ADMIN'|| user.role=== 'HOST'" data-toggle="tooltip" title="users"><img  src="images/users.png" width="31" height="31"> </a>
       <p style='font-size:26px;float:left;font-family: cursive;color:#c41088;'><b>HospitalApp</b></p>
       <p style='font-size:26px;float:left;font-family:Brush Script MT;'>
@@ -38,15 +39,21 @@ Vue.component("top-header", {
         confirmButtonText: 'Yes, Im sure!'
       }).then((result) => {
         if (result.isConfirmed) {
-          localStorage.removeItem('username');
-          localStorage.removeItem('password');
-          localStorage.removeItem('role');
-          //localStorage.removeItem('jwt');
+          deleteCookie("JWT");
           this.$router.push('/login');
           window.location.reload(); //load pushed
         }
       })
     }
   },
+  created() {
+    UpdateUserDataFromJWT();
+    console.log(UserData);
+    // axios
+    //   .get('/methodx')
+    //   .then(Response => (console.log(Response)));
+
+
+  }
 
 })

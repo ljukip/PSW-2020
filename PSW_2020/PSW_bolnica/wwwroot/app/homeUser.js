@@ -2,8 +2,8 @@ Vue.component("homeUser", {
     data: function () {
         return {
             user: {
-                username: localStorage.getItem('username'),
-                role: localStorage.getItem('role')
+                username: UserData.username, //localStorage.getItem('username'),
+                role: UserData.role, //localStorage.getItem('role')
             }
         }
     },
@@ -30,6 +30,17 @@ Vue.component("homeUser", {
   
     `,
     methods: {
+        verify: function () {
 
-    }
+        }
+
+    },
+    created() {
+
+
+        if (UserData == {}) {
+            this.$router.push('/login');
+
+        }
+    },
 })

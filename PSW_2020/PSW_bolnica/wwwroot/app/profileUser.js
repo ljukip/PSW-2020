@@ -1,14 +1,16 @@
+
+
 Vue.component("profileUser", {
     data: function () {
         return {
             oldusername: localStorage.getItem('username'),
             user: {
-                name: '',
-                surname: '',
-                gender: '',
-                username: '',
+                name: UserData.name,
+                surname: UserData.surname,
+                gender: UserData.gender,
+                username: UserData.username,
                 password: '',
-                role: localStorage.getItem('role')
+                role: UserData.role,
             },
             passwords: {
                 password1: '',
@@ -64,7 +66,7 @@ Vue.component("profileUser", {
                         <label  v-if="passwordBool!='allow'" class="label1">Password : </label> 
                     </div>
                     <div id="center" style="flex-direction: row;">
-                        <input v-if="passwordBool!='allow'" v-model="user.password" type="password" value="user.password" name="password" v-on:click='passwordChange()' > 
+                        <input v-if="passwordBool!='allow'" v-model="user.password" type="password" value="user.password" placeholder="Start typing to change" name="password" v-on:click='passwordChange()' > 
                         <input v-if="passwordBool==='allow'" v-model="passwords.password2" type="password" name="password2" >      
                     </div>
                     <div> 
@@ -135,17 +137,14 @@ Vue.component("profileUser", {
                     setTimeout(() => this.messageVal = '', 6000);
                 }
                 else {
-                    if (this.passwords.password2 != '') { this.user.password = this.passwords.password2 }
+                    if (this.passwords.password2 != '') { this.user.password = sha512(this.passwords.password2) }
                     console.log("axois profile put username: " + this.user.username);
                     axios
-                        .put(`rest/profileUser/${this.username}`, this.user)
+                        .put(`/profileUser/${this.username}`, this.user)
                         .then(Response => {
                             console.log("updated");
                             this.messageVal = 'SuccesfullUpdate';
                             setTimeout(() => this.messageVal = '', 6000);
-                            localStorage.setItem('username', this.user.username);
-                            localStorage.setItem('password', this.user.password);
-                            localStorage.setItem('role', this.user.role);
 
                             Swal.fire({
                                 position: 'top-end',
@@ -167,26 +166,27 @@ Vue.component("profileUser", {
             setTimeout(() => this.messageVal = '', 6000);
         },
 
-        load: function (data) {
-            this.user.username = data.username;
-            this.user.password = data.password;
-            this.user.name = data.name;
-            this.user.surname = data.surname;
-            this.user.gender = data.gender;
-            this.user.role = data.role;
-
-        }
-
+        /* load: function (data) {
+             this.user.username = data.username;
+             this.user.password = data.password;
+             this.user.name = data.name;
+             this.user.surname = data.surname;
+             this.user.gender = data.gender;
+             this.user.role = data.role;
+ 
+         }
+ */
     },
-    created() {
-
-        if (!localStorage.getItem('username')) {
-            this.$router.push('/login');
-        }
-        else {
-            axios
-                .get('rest/profileUser/' + this.oldusername)
-                .then(response => this.load(response.data))
-        }
-    },
+    /* created() {
+ 
+         if (!localStorage.getItem('username')) {
+             this.$router.push('/login');
+         }
+         else {
+             axios
+                 .get('rest/profileUser/' + this.oldusername)
+                 .then(response => this.load(response.data))
+         }
+     },
+     */
 })

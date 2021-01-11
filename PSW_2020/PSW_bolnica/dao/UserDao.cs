@@ -18,7 +18,6 @@ namespace PSW_bolnica.dao
         public string jwt { get; set; }
         public string address { get; set; }
         public string phoneNumber { get; set; }
-        public string sessionId { get; set; }
 
         public static User UserDaoToUser(UserDao userDao)
         {

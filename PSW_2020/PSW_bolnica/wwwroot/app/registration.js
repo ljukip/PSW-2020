@@ -160,6 +160,7 @@ Vue.component("registration", {
                 }
                 else {
                     console.log("in axios: " + user);
+                    //var sha512 = require('js-sha512');
 
                     axios
                         .post('registration', {
@@ -167,6 +168,7 @@ Vue.component("registration", {
                             surname: user.surname,
                             gender: user.gender,
                             username: user.username,
+                            //password: sha512(user.password1),
                             password: user.password1,
                             role: user.role,
                             address: user.address,
@@ -182,10 +184,11 @@ Vue.component("registration", {
         succes: function (data) {
             console.log('prosao');
             console.log("succes");
-            localStorage.setItem('username', data.username);
-            localStorage.setItem('password', data.password);
-            localStorage.setItem('role', data.role);
-            //localStorage.setItem('jwt', data.jwt);
+
+            deleteCookie("JWT");
+            setCookie("JWT", data, 86400);
+            UpdateUserDataFromJWT();
+
 
             Swal.fire({
                 position: 'top-end',
