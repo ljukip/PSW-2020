@@ -44,6 +44,7 @@ namespace PSW_bolnica
 
             //registraton of services used
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IDoctorService, DoctorService>();
 
         }
 

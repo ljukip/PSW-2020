@@ -853,7 +853,6 @@ C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\bin\Debug\netcoreapp3.1\r
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.csprojAssemblyReference.cache
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.AssemblyInfoInputs.cache
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.AssemblyInfo.cs
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.csproj.CoreCompileInputs.cache
@@ -867,3 +866,4 @@ C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\P
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.dll
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.pdb
 C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.genruntimeconfig.cache
+C:\Users\Ljubica\Desktop\PSW-2020\PSW_2020\PSW_bolnica\obj\Debug\netcoreapp3.1\PSW_bolnica.csprojAssemblyReference.cache

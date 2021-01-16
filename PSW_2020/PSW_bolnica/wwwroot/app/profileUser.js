@@ -177,16 +177,4 @@ Vue.component("profileUser", {
          }
  */
     },
-    /* created() {
- 
-         if (!localStorage.getItem('username')) {
-             this.$router.push('/login');
-         }
-         else {
-             axios
-                 .get('rest/profileUser/' + this.oldusername)
-                 .then(response => this.load(response.data))
-         }
-     },
-     */
 })

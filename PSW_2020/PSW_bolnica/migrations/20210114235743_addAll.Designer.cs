@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PSW_bolnica;
 
-namespace PSW_bolnica.migrations
+namespace PSW_bolnica.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20210114235743_addAll")]
+    partial class addAll
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,11 +28,8 @@ namespace PSW_bolnica.migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DateTimeFrom")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateTimeTo")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Date")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
@@ -40,6 +39,9 @@ namespace PSW_bolnica.migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
+
+                    b.Property<string>("Time")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -66,8 +68,8 @@ namespace PSW_bolnica.migrations
                     b.Property<bool>("Specialist")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Speciality")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Speciality")
+                        .HasColumnType("int");
 
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
@@ -93,8 +95,8 @@ namespace PSW_bolnica.migrations
                     b.Property<int>("SpecialistId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Speciality")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Speciality")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -116,14 +118,14 @@ namespace PSW_bolnica.migrations
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsBlocked")
+                        .HasColumnType("bit");
+
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("isBlocked")
-                        .HasColumnType("bit");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");

@@ -11,17 +11,19 @@ Vue.component("listUsers", {
                 surname: '',
                 username: '',
                 gender: null,
-                role: null,
+                canceledAppointments: null,
             },
             roles: ['ADMIN', 'PATIENT'],
             genders: ['Male', 'Female', 'Other'],
             searchedQuery: '?',
-
+            blockedAllowed: 'false',
+            referralPressed: 'true',
+            speciality: ['cardiology', 'neurology']
         }
     },
     template: `
     <div style="height: 81.7%;">
-    <h1 v-if="user.role ==='ADMIN'">List of all users</h1>
+    <h1>List of all patients</h1>
     <div id="filter">
         <nav>
             <hr style='background:#c41088;height:4px;'>
@@ -38,10 +40,6 @@ Vue.component("listUsers", {
                     <option disabled value="">Gender</option>
                     <option v-for="gender in genders">{{gender}}</option>
                 </select>
-                <select id='listOfRoles' v-model="searchedUser.role">
-                    <option disabled value="">Role</option>
-                    <option v-for="role in roles">{{role}}</option>
-                </select>
                 <button class="button2" type="submit" v-on:click="search()">Search</button>
                 <button style='margin-right:5px;' v-on:click="reset()" class="button2" type="button">Reset</button>
             </form>
@@ -57,7 +55,9 @@ Vue.component("listUsers", {
                             <th>Surname</th>
                             <th>Gender</th>
                             <th>Username</th>
-                            <th>Role</th>
+                            <th>Canceled appointments</th>
+                            <th v-if="user.role==='ADMIN'">Block</th>
+                            <th v-if="user.role==='DOCTOR'">Refferal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,7 +66,15 @@ Vue.component("listUsers", {
                             <td>{{user.surname}}</td>
                             <td>{{user.gender}}</td>
                             <td>{{user.username}}</td>
-                            <td>{{user.role}}</td>
+                            <td>{{user.canceledAppointments}}</td>
+                            <td>
+                            <button v-if="user.role==='ADMIN' && blockedAllowed==='true'" class="buttonDelete"></button>
+                            <button v-if="user.role==='DOCTOR'">referral</button>
+                            <select v-if="referalPressed==='true'" id='listOfSpecialities' v-model="speciality">
+                                <option disabled value="">Speciality</option>
+                                <option v-for="s in speciality">{{s}}</option>
+                            </select>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -80,7 +88,7 @@ Vue.component("listUsers", {
         getAllUsers() {
             //gets all users and puts them in users[]
             axios
-                .get('rest/users/all/' + this.user.role)
+                .get('users/all/' + this.user.role)
                 .then(Response => (this.users = Response.data));
         },
         search() {
@@ -101,7 +109,7 @@ Vue.component("listUsers", {
             }
 
             axios
-                .get('rest/user/search/' + this.user.role + this.searchedQuery)
+                .get('user/search/' + this.user.role + this.searchedQuery)
                 .then(response => {
                     this.users = response.data;
                     this.searchedQuery = '?';
@@ -121,8 +129,6 @@ Vue.component("listUsers", {
 
     created() {
         this.role = localStorage.getItem('role');
-        if (this.role == "ADMIN") {
-            this.getAllUsers();
-        }
+        this.getAllUsers();
     }
 })

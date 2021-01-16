@@ -65,8 +65,9 @@ namespace PSW_bolnica.Controllers
         [Route("/login")]
         public IActionResult Login(Authenticate user)
         {
+            string password512= Util.SHA512(user.password);
             //search for user thats trying to logg in
-            User userForLogin = dbcontext.user.FirstOrDefault(u => u.username == user.username && u.password == Util.SHA512( user.password));
+            User userForLogin = dbcontext.user.FirstOrDefault(u => u.username == user.username && u.password == password512);
             if (userForLogin != null)
             {
                 UserDao userForLogginDao = UserDao.UserToUserDao(userForLogin);

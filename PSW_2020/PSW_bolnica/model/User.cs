@@ -16,5 +16,11 @@ namespace PSW_bolnica.model
         public string gender { get; set; }
         public string address { get; set; }
         public string phoneNumber { get; set; }
+
+        public bool? isBlocked { get; set; }
+
+        public virtual List<Appointment> appointments { get; set; }
+
+        public virtual Referral Referral { get; set; }
     }
 }

@@ -17,6 +17,21 @@ body {
   position: relative;
   display: block;
 }
+.buttonChoose {
+  border-radius: 60%;
+  box-shadow: 11px 9px 9px rgba(54, 4, 42, 0.79);
+  background-size: cover;
+  background-image: url("../images/443517.png");
+  display: inline-block;
+  height: 6vh;
+  min-height: 1vh;
+  min-width: 6vh;
+  display: inline-block;
+  font-size: 16px;
+  font-family: cursive;
+  cursor: pointer;
+  color: #fdfcfd;
+}
 .App {
   text-align: center;
   display: flex;
@@ -191,7 +206,6 @@ tr:hover {
 }
 input[type="text"],
 input[type="password"] {
-  width: 50%;
   margin: 8px 0;
   padding: 12px 20px;
   display: inline-block;

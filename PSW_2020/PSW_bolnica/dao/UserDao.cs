@@ -19,6 +19,9 @@ namespace PSW_bolnica.dao
         public string address { get; set; }
         public string phoneNumber { get; set; }
 
+        public  List<Appointment> appointments { get; set; }
+        public  Referral Referral { get; set; }
+
         public static User UserDaoToUser(UserDao userDao)
         {
             User user = new User
