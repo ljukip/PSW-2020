@@ -20,8 +20,8 @@ Vue.component("newAppointment", {
                 date: ''
             },
             dates: {
-                from: new Date(2021, 9, 16),
-                to: new Date(2021, 9, 16)
+                from: new Date(),
+                to: new Date()
             },
             table: false,
             priorityString: '',
@@ -108,6 +108,12 @@ Vue.component("newAppointment", {
     `,
     methods: {
         newAppointment() {
+            axios
+                .post('newAppointment/' + UserData.username + '/' + this.dates.from.toISOString() + '/' + this.dates.to.toISOString() + '/' + this.filteredDoctors.id)
+                .then((responce) => this.succes(responce.data))
+                .catch(() => this.failed());
+        },
+        succes(data) {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -116,6 +122,13 @@ Vue.component("newAppointment", {
                 timer: 1400
             })
             this.$router.push('/appointments');
+        },
+        failed() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+            })
         },
         search() {
             if (this.dates.from == '') {
@@ -181,9 +194,17 @@ Vue.component("newAppointment", {
         vuejsDatepicker
     },
     created() {
-        axios
-            .get('allDoctors')
-            .then(Response => (this.doctors = Response.data));
+
+        if (UserData == {}) {
+            this.$router.push('/login');
+
+        }
+        else {
+            axios
+                .get('allDoctors/' + UserData.username)
+                .then(Response => (this.doctors = Response.data));
+
+        }
 
     },
 })

@@ -10,5 +10,13 @@ namespace PSW_bolnica.interfaces
     public interface IUserService
     {
         UserDao Add(User user);
+
+        int GetUserId(string username);
+
+        public User GetWithId(int id);
+
+        public User Block(int id);
+
+        public User GetWithUsername(string username);
     }
 }

@@ -6,12 +6,6 @@ using System.Threading.Tasks;
 
 namespace PSW_bolnica.model
 {
-    public enum Status
-    {
-        passed,
-        pending,
-        cancelled
-    }
 
     [Table("Appointment")]
     public class Appointment
@@ -28,5 +22,7 @@ namespace PSW_bolnica.model
         public DateTime DateTimeFrom { get; set; }
 
         public DateTime DateTimeTo { get; set; }
+
+        public bool isCanceled { get; set; } 
     }
 }

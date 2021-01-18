@@ -19,8 +19,12 @@ namespace PSW_bolnica.dao
         public string address { get; set; }
         public string phoneNumber { get; set; }
 
+        public int canceledAppointments { get; set; }
+
         public  List<Appointment> appointments { get; set; }
-        public  Referral Referral { get; set; }
+        public  int ReferralId { get; set; }
+
+
 
         public static User UserDaoToUser(UserDao userDao)
         {
@@ -28,14 +32,16 @@ namespace PSW_bolnica.dao
             {
                 id = userDao.id,
                 username = userDao.username,
-                surname= userDao.surname,
-                name=userDao.name,
-                password=userDao.password,
-                role=userDao.role,
-                gender=userDao.gender,
-                address=userDao.address,
-                phoneNumber=userDao.phoneNumber
-                
+                surname = userDao.surname,
+                name = userDao.name,
+                password = userDao.password,
+                role = userDao.role,
+                gender = userDao.gender,
+                address = userDao.address,
+                phoneNumber = userDao.phoneNumber,
+                canceledAppointments = userDao.canceledAppointments,
+                ReferralId=userDao.ReferralId
+
             };
 
             return user;
@@ -53,7 +59,9 @@ namespace PSW_bolnica.dao
                 role = user.role,
                 gender = user.gender,
                 address = user.address,
-                phoneNumber = user.phoneNumber
+                phoneNumber = user.phoneNumber,
+                canceledAppointments=user.canceledAppointments,
+                ReferralId=user.ReferralId
             };
 
             return userDao;

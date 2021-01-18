@@ -17,19 +17,22 @@ namespace PSW_bolnica.Controllers
     {
         private readonly DBContext dbcontext;
         private IDoctorService service;
+        private IUserService userService;
         private readonly IConfiguration _configuration;
 
-        public DoctorController(DBContext context, IDoctorService doctorService, IConfiguration configuration)
+        public DoctorController(DBContext context, IUserService userServicee, IDoctorService doctorService, IConfiguration configuration)
         {
             dbcontext = context;
             service = doctorService;
+            userService = userServicee;
             _configuration = configuration;
         }
         //return all doctors
-        [HttpGet("/allDoctors")]
-        public IActionResult Get()
+        [HttpGet("/allDoctors/{username}")]
+        public IActionResult Get(string username)
         {
-            var result=service.GetAll();
+            User patient = userService.GetWithUsername(username);
+            var result=service.GetAll(patient);
             Debug.Write("in allDoctors:" + result);
 
             return Ok(result);
@@ -49,7 +52,7 @@ namespace PSW_bolnica.Controllers
             return Ok(doctor);
         }
 
-        [HttpGet]
+       /* [HttpGet]
         [Route("/getSpecialist/{patientId}")]
         public IActionResult GetSpecialist(int patientId)
         {
@@ -57,6 +60,6 @@ namespace PSW_bolnica.Controllers
                 return NotFound();
 
             return Ok(service.GetSpecialist(patientId));
-        }
+        }*/
     }
 }

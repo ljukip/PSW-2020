@@ -2,7 +2,7 @@ Vue.component("login", {
     data: function () {
         return {
             user: { username: '', password: '', role: '' },
-            error: false
+            error: false,
         }
     },
     template: `
@@ -28,7 +28,7 @@ Vue.component("login", {
                     <div id="center">
                         <div v-if="error" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong username or password</div>
                         <div v-if="error===wrongPassword" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong password</div>
-                        <button class="button1" type="submit" v-on:click='login(user)'>Login</button> 
+                        <button class="button1" type="submit" v-on:click='check(user)'>Login</button> 
                         <button class="button1" v-on:click='cancel()' > Cancel</button> 
                     </div>
                     <p></p>
@@ -44,8 +44,15 @@ Vue.component("login", {
     `,
 
     methods: {
+        check(user) {
+
+            axios
+                .get('checkBlocked/' + user.username)
+                .then(Response => this.allowed(Response));
+        },
 
         login: function (user) {
+
 
             axios //sending a request for a server to update the user, thus logging the user in
                 //url-which is used for a request, data-data for update (post)
@@ -74,6 +81,22 @@ Vue.component("login", {
             })
             setTimeout(this.$router.push('/homeUser'), 2100);
             setTimeout(window.location.reload(), 2100); //load pushed
+
+        },
+        allowed(data) {
+            console.log(data.data + "data");
+            if (data.data == "blocked") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'You have been blocked',
+                    text: 'you can no longer log in!',
+                });
+                deleteCookie("JWT");
+                UpdateUserDataFromJWT();
+            }
+            else {
+                this.login(this.user);
+            }
         },
         cancel: function () {
             Swal.fire({
@@ -94,14 +117,12 @@ Vue.component("login", {
 
         failed: function () {
             console.log("bad request");
-            //localStorage.removeItem("jwt");
             this.error = true;
             console.log(this.error);
             setTimeout(() => this.error = false, 6000);
         },
         wrongPassword: function () {
             console.log("wrong password");
-            //localStorage.removeItem("jwt");
             this.error = 'wrongPassword';
             console.log(this.error);
             setTimeout(() => this.error = false, 6000);

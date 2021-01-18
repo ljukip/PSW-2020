@@ -19,8 +19,10 @@ namespace PSW_bolnica.model
 
         public bool? isBlocked { get; set; }
 
+        public int canceledAppointments { get; set; }
+
         public virtual List<Appointment> appointments { get; set; }
 
-        public virtual Referral Referral { get; set; }
+        public virtual int ReferralId { get; set; }
     }
 }

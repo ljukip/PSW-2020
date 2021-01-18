@@ -22,15 +22,11 @@ namespace PSW_bolnica.services
         {
             if (newUser == null || newUser.password == null)
                 return null;
-            //check if the user with the given name already exists
+            //check if the user with the given username already exists
             Debug.WriteLine("usao u proveru");
             if (dbcontext.user.SingleOrDefault(u => u.username == newUser.username) != null)
                 return null;
 
-            //TODO: add doctor to new user
-
-            //saving in DB
-            //dbcontext.Users.ToList().ForEach(user => Debug.WriteLine("user je :" + user.name));
             newUser.password = Util.SHA512(newUser.password);
 
             dbcontext.user.Add(newUser);
@@ -39,6 +35,27 @@ namespace PSW_bolnica.services
             UserDao userDao = UserDao.UserToUserDao(newUser);
 
             return userDao;
+        }
+
+        public int GetUserId(string username) {
+            User user= dbcontext.user.FirstOrDefault(u => u.username.Equals(username));
+            return user.id;
+        }
+
+        public User Block(int id)
+        {
+            User user = dbcontext.user.FirstOrDefault(u => u.id== id);
+            user.isBlocked = true;
+            dbcontext.SaveChanges();
+
+            return user;
+        }
+        public User GetWithId(int id) {
+            return dbcontext.user.FirstOrDefault(u => u.id == id);
+        }
+        public User GetWithUsername(string username)
+        {
+            return dbcontext.user.FirstOrDefault(u => u.username == username);
         }
     }
 }

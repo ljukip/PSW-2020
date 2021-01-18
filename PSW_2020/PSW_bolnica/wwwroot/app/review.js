@@ -4,8 +4,8 @@ Vue.component("review", {
             user: {
                 username: localStorage.getItem('username'),
                 role: localStorage.getItem('role'),
-                review: '',
-            }
+            },
+            review: '',
         }
     },
     template: `
@@ -27,6 +27,37 @@ Vue.component("review", {
   
     `,
     methods: {
+        comment() {
+            axios
+                .post('newFeedback/' + UserData.username + '/' + this.review)
+                .then((responce) => this.succes(responce.data))
+                .catch(() => this.failed());
 
-    }
+        },
+        succes(data) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Feedback has been saved',
+                showConfirmButton: false,
+                timer: 1400
+            })
+            this.$router.push('/appointments');
+        },
+        failed() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+            })
+        }
+    },
+    created() {
+
+
+        if (UserData == {}) {
+            this.$router.push('/login');
+
+        }
+    },
 })

@@ -10,8 +10,8 @@ using PSW_bolnica;
 namespace PSW_bolnica.Migrations
 {
     [DbContext(typeof(DBContext))]
-    [Migration("20210114235743_addAll")]
-    partial class addAll
+    [Migration("20210118180541_prob")]
+    partial class prob
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,8 +28,11 @@ namespace PSW_bolnica.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Date")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("DateTimeFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateTimeTo")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
@@ -37,11 +40,8 @@ namespace PSW_bolnica.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Time")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("isCanceled")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -68,8 +68,8 @@ namespace PSW_bolnica.Migrations
                     b.Property<bool>("Specialist")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Speciality")
-                        .HasColumnType("int");
+                    b.Property<string>("Speciality")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
@@ -77,6 +77,27 @@ namespace PSW_bolnica.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Doctor");
+                });
+
+            modelBuilder.Entity("PSW_bolnica.model.Feedback", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("isPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("patientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("feedback");
                 });
 
             modelBuilder.Entity("PSW_bolnica.model.Referral", b =>
@@ -92,16 +113,18 @@ namespace PSW_bolnica.Migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Patientid")
+                        .HasColumnType("int");
+
                     b.Property<int>("SpecialistId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Speciality")
-                        .HasColumnType("int");
+                    b.Property<string>("Speciality")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId")
-                        .IsUnique();
+                    b.HasIndex("Patientid");
 
                     b.HasIndex("SpecialistId");
 
@@ -118,14 +141,20 @@ namespace PSW_bolnica.Migrations
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsBlocked")
-                        .HasColumnType("bit");
+                    b.Property<int>("ReferralId")
+                        .HasColumnType("int");
 
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("canceledAppointments")
+                        .HasColumnType("int");
+
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("isBlocked")
+                        .HasColumnType("bit");
 
                     b.Property<string>("name")
                         .HasColumnType("nvarchar(max)");
@@ -170,10 +199,8 @@ namespace PSW_bolnica.Migrations
             modelBuilder.Entity("PSW_bolnica.model.Referral", b =>
                 {
                     b.HasOne("PSW_bolnica.model.User", "Patient")
-                        .WithOne("Referral")
-                        .HasForeignKey("PSW_bolnica.model.Referral", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("Patientid");
 
                     b.HasOne("PSW_bolnica.model.Doctor", "Specialist")
                         .WithMany("Referrals")

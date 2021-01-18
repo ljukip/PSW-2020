@@ -1,8 +1,9 @@
 Vue.component("appointments", {
     data: function () {
         return {
-            appointments: [{ id: '', doctor: '', speciality: '', date: '', time: '' }],
-
+            appointmentsPassed: [],
+            appointmentsFuture: [],
+            appointments: [],
         }
     },
     template: `
@@ -19,18 +20,16 @@ Vue.component("appointments", {
                         <tr class="header">
                             <th>Doctor</th>
                             <th>Speciality</th>
-                            <th>Date</th>
-                            <th>Time</th>
+                            <th>Date and time</th>
                             <th>Cancel</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-bind:key='appointment.id' v-for='appointment in appointments'>
-                            <td>{{appointment.doctor}}</td>
-                            <td>{{appointment.Speciality}}</td>
-                            <td>{{appointment.date}}</td>
-                            <td>{{appointment.time}}</td>
-                            <td><button class="buttonChoose" style="background-image: url('../images/cnc.png');" v-on:click= "cancel()" type="button"></button></td>
+                        <tr v-bind:key='appointment.id' v-for='appointment in appointmentsFuture'>
+                            <td>{{appointment.doctor.name}}, {{appointment.doctor.surname}}</td>
+                            <td>{{appointment.doctor.speciality}}</td>
+                            <td>{{appointment.dateTimeFrom}}</td>
+                            <td><button class="buttonChoose" style="background-image: url('../images/cnc.png');" v-on:click= "cancel(appointment.id)" type="button"></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -49,17 +48,15 @@ Vue.component("appointments", {
                             <tr class="header">
                                 <th>Doctor</th>
                                 <th>Speciality</th>
-                                <th>Date</th>
-                                <th>Time</th>
+                                <th>Date and time</th>
                                 <th>Review</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-bind:key='appointment.id' v-for='appointment in appointments'>
-                                <td>{{appointment.doctor}}</td>
-                                <td>{{appointment.speciality}}</td>
-                                <td>{{appointment.date}}</td>
-                                <td>{{appointment.time}}</td>
+                            <tr v-bind:key='appointment.id' v-for='appointment in appointmentsPassed'>
+                                <td>{{appointment.doctor.name}}, {{appointment.doctor.surname}}</td>
+                                <td>{{appointment.doctor.speciality}}</td>
+                                <td>{{appointment.dateTimeFrom}}</td>
                                 <td><button class="buttonChoose" style="background-image: url('../images/review.png');" v-on:click= "review()" type="button"></button></td>
                             </tr>
                         </tbody>
@@ -71,7 +68,7 @@ Vue.component("appointments", {
     </div>
     `,
     methods: {
-        cancel() {
+        cancel(id) {
             Swal.fire({
                 title: 'Are you sure you want to cancel the appointment?',
                 text: "Appointment will be canceled",
@@ -82,9 +79,19 @@ Vue.component("appointments", {
                 confirmButtonText: 'Yes, Im sure!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    //cancel appointment
-                    this.$router.push('/appointments');
-                    window.location.reload();
+                    axios
+                        .put(`cancel/` + id)
+                        .then(Response => {
+
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'Appointment has been canceled!',
+                                showConfirmButton: false,
+                                timer: 3500
+                            })
+                            setTimeout(() => window.location.reload(), 3500);
+                        })
                 }
             })
         },
@@ -93,6 +100,39 @@ Vue.component("appointments", {
             //axios  + appointment.id
 
         },
+        load(data) {
+            this.appointments = data;
+            let date = new Date();
+            for (let i = 0; i < this.appointments.length; i++) {
+                console.log(this.appointments[i].dateTimeFrom + date.toISOString());
+                if (this.appointments[i].dateTimeFrom < date.toISOString()) {
+                    this.appointmentsPassed.push(this.appointments[i]);
+                }
+                else {
+                    this.appointmentsFuture.push(this.appointments[i]);
+                }
+
+            }
+        },
+        failed() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+            })
+        }
 
     },
+    created() {
+        if (UserData == {}) {
+            this.$router.push('/login');
+
+        }
+        else {
+            axios
+                .get('patientAppointments/' + UserData.username)
+                .then(Response => this.load(Response.data));
+        }
+
+    }
 })

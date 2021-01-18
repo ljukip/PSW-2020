@@ -1,50 +1,22 @@
 Vue.component("listUsers", {
     data: function () {
         return {
-            user: {
-                username: localStorage.getItem('username'),
-                role: localStorage.getItem('role')
-            },
+            username: UserData.username,
+            role: UserData.role,
+            user: '',
             users: [],
-            searchedUser: {
-                name: '',
-                surname: '',
-                username: '',
-                gender: null,
-                canceledAppointments: null,
-            },
-            roles: ['ADMIN', 'PATIENT'],
+            roles: ['ADMIN', 'PATIENT', 'DOCTOR'],
             genders: ['Male', 'Female', 'Other'],
-            searchedQuery: '?',
-            blockedAllowed: 'false',
-            referralPressed: 'true',
-            speciality: ['cardiology', 'neurology']
+            blockedAllowed: 'true',
+            referralPressed: 'false',
+            specialities: ['cardiology', 'neurology'],
+            speciality: ''
         }
     },
     template: `
     <div style="height: 81.7%;">
     <h1>List of all patients</h1>
     <div id="filter">
-        <nav>
-            <hr style='background:#c41088;height:4px;'>
-            <label class="label1">Search</label>
-            <form class="form-inline">
-                <input style="width:14% ;" v-model='searchedUser.name' type="text"
-                    placeholder="name" aria-label="Search">
-                <input style="width:14% ;" v-model='searchedUser.surname' type="text"
-                    placeholder="surname" aria-label="Search">
-                <input style="width:14% ;" v-model='searchedUser.username' type="text"
-                    placeholder="username" aria-label="Search">
-                <select id='listOfGenders'
-                    v-model="searchedUser.gender">
-                    <option disabled value="">Gender</option>
-                    <option v-for="gender in genders">{{gender}}</option>
-                </select>
-                <button class="button2" type="submit" v-on:click="search()">Search</button>
-                <button style='margin-right:5px;' v-on:click="reset()" class="button2" type="button">Reset</button>
-            </form>
-            <hr style='background:#c41088;height:4px;'>
-        </nav>
     </div>    
     <div id="Div-panel" style="display: inline;">
             <div>
@@ -56,8 +28,8 @@ Vue.component("listUsers", {
                             <th>Gender</th>
                             <th>Username</th>
                             <th>Canceled appointments</th>
-                            <th v-if="user.role==='ADMIN'">Block</th>
-                            <th v-if="user.role==='DOCTOR'">Refferal</th>
+                            <th v-if="role==='ADMIN'">Block</th>
+                            <th v-if="role==='DOCTOR'">Refferal</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -68,11 +40,12 @@ Vue.component("listUsers", {
                             <td>{{user.username}}</td>
                             <td>{{user.canceledAppointments}}</td>
                             <td>
-                            <button v-if="user.role==='ADMIN' && blockedAllowed==='true'" class="buttonDelete"></button>
-                            <button v-if="user.role==='DOCTOR'">referral</button>
-                            <select v-if="referalPressed==='true'" id='listOfSpecialities' v-model="speciality">
-                                <option disabled value="">Speciality</option>
-                                <option v-for="s in speciality">{{s}}</option>
+                            <button v-if="role==='ADMIN' && !user.isBlocked&& user.canceledAppointments>2" v-on:click= "block(user.id,user.username)"  class="buttonChoose" style="background-image: url('../images/block.png');"></button>
+                            <button v-if="role==='ADMIN' && user.isBlocked && user.canceledAppointments>2"  class="buttonChoose" style="background-image: url('../images/blocked.svg');" disabled></button>
+                            <button v-if="role==='DOCTOR' && user.ReferralId!='0'" v-on:click= "referr(user.speciality, user.id)">send referral</button>
+                            <select v-if="role==='DOCTOR'" id='listOfSpecialities' v-model="user.speciality">
+                                <option disabled value="">Specialities</option>
+                                <option v-for="s in specialities">{{s}}</option>
                             </select>
                             </td>
                         </tr>
@@ -88,47 +61,97 @@ Vue.component("listUsers", {
         getAllUsers() {
             //gets all users and puts them in users[]
             axios
-                .get('users/all/' + this.user.role)
+                .get('getUsers')
                 .then(Response => (this.users = Response.data));
+
+            console.log(this.users);
         },
-        search() {
-            if (this.searchedUser.name !== '') {
-                this.searchedQuery += 'name=' + this.searchedUser.name;
-            }
-            if (this.searchedUser.surname !== '') {
-                this.searchedQuery += '&surname=' + this.searchedUser.surname;
-            }
-            if (this.searchedUser.username !== '') {
-                this.searchedQuery += '&username=' + this.searchedUser.username;
-            }
-            if (this.searchedUser.gender !== null) {
-                this.searchedQuery += '&gender=' + this.searchedUser.gender;
-            }
-            if (this.searchedUser.role !== null) {
-                this.searchedQuery += '&role=' + this.searchedUser.role;
-            }
+        referr(speciality, patientId) {
+            Swal.fire({
+                title: 'Are you sure you want to issue a refferal ?',
+                text: "Referral will be issued",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ffdff0',
+                cancelButtonColor: '#c41088',
+                confirmButtonText: 'Yes, Im sure!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //block user
+                    axios
+                        .post(`referral/create/` + speciality + '/' + patientId)
+                        .then(Response => {
+                            console.log("ucreated");
 
-            axios
-                .get('user/search/' + this.user.role + this.searchedQuery)
-                .then(response => {
-                    this.users = response.data;
-                    this.searchedQuery = '?';
-                });
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'referral has been issued',
+                                showConfirmButton: false,
+                                timer: 3500
+                            })
+                            setTimeout(() => window.location.reload(), 3500);
 
+                            this.$router.push('/patients');
+                            window.location.reload();
+                        })
+
+                }
+            })
+        },
+        block(id, username) {
+            Swal.fire({
+                title: 'Are you sure you want to block ' + username + ' ?',
+                text: "User will be blocked",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ffdff0',
+                cancelButtonColor: '#c41088',
+                confirmButtonText: 'Yes, Im sure!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //block user
+                    axios
+                        .put(`blockUser/` + id)
+                        .then(Response => {
+                            console.log("user blocked");
+
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: 'User' + ' has been blocked',
+                                showConfirmButton: false,
+                                timer: 3500
+                            })
+                            setTimeout(() => window.location.reload(), 3500);
+
+                            this.$router.push('/patients');
+                            window.location.reload();
+                        })
+
+                }
+            })
         },
         reset() {
-            if (this.user.role == "ADMIN") {
+            if (this.user.role == "ADMIN" || this.user.role == "DOCTOR") {
                 this.getAllUsers();
             }
-
-            this.searchedQuery = '?';
 
         },
 
     },
 
     created() {
-        this.role = localStorage.getItem('role');
-        this.getAllUsers();
+        if (UserData == {}) {
+            this.$router.push('/login');
+
+        }
+        else if (UserData.role === 'PATIENT') {
+            this.$router.push('/profileUser');
+        }
+        else {
+            this.getAllUsers();
+        }
+
     }
 })

@@ -165,16 +165,13 @@ Vue.component("profileUser", {
             this.messageVal = 'ChangesFailed';
             setTimeout(() => this.messageVal = '', 6000);
         },
+    },
+    created() {
 
-        /* load: function (data) {
-             this.user.username = data.username;
-             this.user.password = data.password;
-             this.user.name = data.name;
-             this.user.surname = data.surname;
-             this.user.gender = data.gender;
-             this.user.role = data.role;
- 
-         }
- */
+
+        if (UserData == {}) {
+            this.$router.push('/login');
+
+        }
     },
 })

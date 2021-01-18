@@ -2,7 +2,7 @@
 
 namespace PSW_bolnica.Migrations
 {
-    public partial class addAll : Migration
+    public partial class isCanceld : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

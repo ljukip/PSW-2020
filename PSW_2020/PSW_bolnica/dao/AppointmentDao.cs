@@ -20,7 +20,7 @@ namespace PSW_bolnica.dao
 
         public DateTime DateTimeTo { get; set; }
 
-        public Status Status { get; set; }
+        public bool isCanceled { get; set; }
 
         public static Appointment AppointmentDaoToAppointment(AppointmentDao appointmentDao)
         {
@@ -31,7 +31,8 @@ namespace PSW_bolnica.dao
                 PatientId = appointmentDao.PatientId,
                 DateTimeFrom = appointmentDao.DateTimeFrom,
                 DateTimeTo = appointmentDao.DateTimeTo,
-                Doctor = appointmentDao.Doctor
+                Doctor = appointmentDao.Doctor,
+                isCanceled=appointmentDao.isCanceled
             };
 
             return appointment;
@@ -46,7 +47,9 @@ namespace PSW_bolnica.dao
                 PatientId = appointment.PatientId,
                 DateTimeFrom = appointment.DateTimeFrom,
                 DateTimeTo = appointment.DateTimeTo,
-                Doctor= appointment.Doctor
+                Doctor= appointment.Doctor,
+                isCanceled=appointment.isCanceled
+
             };
 
             return appointmentDao;

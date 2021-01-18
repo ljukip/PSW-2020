@@ -17,9 +17,31 @@ namespace PSW_bolnica.services
             dbcontext = context;
         }
 
-        public List<DoctorDao> GetAll()
+        public List<DoctorDao> GetAll(User patient)
         {
-            return dbcontext.doctors.Select(x => DoctorDao.DoctorToDoctorDao(x)).ToList();
+            List<DoctorDao> allDoctors = dbcontext.doctors.Select(x => DoctorDao.DoctorToDoctorDao(x)).ToList();
+            List<DoctorDao> doctors = new List<DoctorDao>();
+            Referral referral = dbcontext.referral.FirstOrDefault(x => x.Id==patient.ReferralId);
+            //proveri da li ima referral, ako ima vrati one specijaliste koji odg uputu, ako ne vrati lekare bez specijalnosti
+            if (referral != null) {
+                foreach (DoctorDao doctor in allDoctors) {
+                    if (doctor.Speciality == referral.Speciality) {
+                        doctors.Add(doctor);
+                    }
+                }
+                return doctors;
+            }
+            else
+            {
+                foreach (DoctorDao doctor in allDoctors)
+                {
+                    if (doctor.Specialist == false)
+                    {
+                        doctors.Add(doctor);
+                    }
+                }
+                return doctors;
+            }
 
         }
 
@@ -58,11 +80,17 @@ namespace PSW_bolnica.services
             Appointment appointment = null;
 
             List<AppointmentDao> allAppointments = new List<AppointmentDao>();
+            doctor.Appointments = new List<Appointment>();
 
             dbcontext.appointments.ToList().ForEach(x => allAppointments.Add(AppointmentDao.AppointmentToAppointmentDao(x)));
+
             foreach (AppointmentDao a in allAppointments) {
+                
                 if (a.DoctorId == doctor.Id) {
-                    doctor.Appointments.Add(AppointmentDao.AppointmentDaoToAppointment(a));
+                    if (!a.isCanceled) {
+                            doctor.Appointments.Add(AppointmentDao.AppointmentDaoToAppointment(a));
+                    
+                    }
                 }
             }
             if (doctor.Appointments == null)
@@ -72,11 +100,20 @@ namespace PSW_bolnica.services
                 appointment.DateTimeTo = DateTimeTo;
                 appointment.Doctor = DoctorDao.DoctorDaoToDoctor(doctor);
             }
-            else {
+            else
+            {
                 //for each date in the interval [from-to], at a given time, check if theres already an appointment, if not select one
-                for (DateTime date = DateTimeFrom; date < DateTimeTo; date.AddDays(1))
+                for (DateTime date = DateTimeFrom; date < DateTimeTo; date = date.AddDays(0.02084))
                 {
-                    appointment = doctor.Appointments.FirstOrDefault(x => x.DateTimeFrom == date);
+                    Appointment appointmentExisting = doctor.Appointments.FirstOrDefault(x => x.DateTimeFrom == date);
+                    if (appointmentExisting == null)
+                    {
+                        appointment = new Appointment();
+                        appointment.DateTimeFrom = date;
+                        appointment.DateTimeTo = DateTimeTo;
+                        appointment.Doctor = DoctorDao.DoctorDaoToDoctor(doctor);
+                        break;
+                    }
                 }
             }
             return appointment;
@@ -92,11 +129,11 @@ namespace PSW_bolnica.services
             return doctor;
         }
 
-        public DoctorDao GetSpecialist(int patientId)
+       /* public DoctorDao GetSpecialist(int patientId)
         {
             User patient = dbcontext.user.FirstOrDefault(patient => patient.id == patientId);
 
-            if (patient == null || patient.Referral == null || patient.Referral.IsDeleted)
+            if (patient == null || patient.ReferralId == null)
                 return null;
 
             Doctor doctor = dbcontext.doctors.FirstOrDefault(doc => doc.Speciality == patient.Referral.Speciality);
@@ -105,6 +142,6 @@ namespace PSW_bolnica.services
                 return null;
 
             return DoctorDao.DoctorToDoctorDao(doctor);
-        }
+        }*/
     }
 }

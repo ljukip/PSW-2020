@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PSW_bolnica.model
 {
-    [Table("Referral")]
+    //[Table("Referral")]
     public class Referral
     {
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace PSW_bolnica.model
 
         public virtual Doctor Specialist { get; set; }
 
-        public virtual int PatientId { get; set; }
+        public int idOfPatient { get; set; }
 
         public virtual User Patient { get; set; }
 

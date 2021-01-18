@@ -38,7 +38,7 @@ namespace PSW_bolnica.dao
                 Surname=doctor.Surname,
                 Specialist=doctor.Specialist,
                 IsDeleted=doctor.IsDeleted,
-                //WorkingDays=doctor.WorkingDays
+                Speciality=doctor.Speciality
             };
             return doctorDao;
         }
@@ -50,7 +50,7 @@ namespace PSW_bolnica.dao
                 Surname = doctorDao.Surname,
                 Specialist = doctorDao.Specialist,
                 IsDeleted = doctorDao.IsDeleted,
-                //WorkingDays = doctorDao.WorkingDays
+                Speciality=doctorDao.Speciality
             };
             return doctor;
         }

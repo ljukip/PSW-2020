@@ -34,7 +34,9 @@ namespace PSW_bolnica
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+               options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
 
             services.AddDbContext<DBContext>(options =>
                      options.UseSqlServer(ConfigurationExtensions.GetConnectionString(Configuration, "DBContextConnectionString")).UseLazyLoadingProxies());
@@ -45,6 +47,9 @@ namespace PSW_bolnica
             //registraton of services used
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IReferralService, ReferralService>();
 
         }
 

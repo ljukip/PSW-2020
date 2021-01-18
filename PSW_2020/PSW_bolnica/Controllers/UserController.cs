@@ -36,6 +36,29 @@ namespace PSW_bolnica.Controllers
             service = userService;
             _configuration = configuration;
         }
+
+        [HttpPut("/blockUser/{id}")]
+        public IActionResult Block(int id)
+        {
+            User userForBlock = new User();
+            userForBlock = service.Block(id);
+
+
+            return Ok(userForBlock);
+        }
+
+        [HttpGet("/checkBlocked/{username}")]
+        public IActionResult Check(string username)
+        {
+            string blocked="notBlocked";
+            User user = dbcontext.user.FirstOrDefault(u => u.username == username);
+            if (user.isBlocked == true)
+            {
+                blocked = "blocked";
+            }
+            return Ok(blocked);
+        }
+
         //return all users
         [HttpGet("/getUsers")]
         public IActionResult Get()
@@ -115,7 +138,7 @@ namespace PSW_bolnica.Controllers
                     JWTClaim("name", user.name),
                     JWTClaim("surname", user.surname),
                     JWTClaim("gender",user.gender),
-                    JWTClaim("role", user.role),
+                    JWTClaim("role", user.role)
                 }),
                 Expires = DateTime.UtcNow.AddHours(_configuration.GetValue<int>("AppSettings:JWT:Expire_Time_Hours")),
                 Issuer = _configuration["AppSettings:JWT:Issuer"],

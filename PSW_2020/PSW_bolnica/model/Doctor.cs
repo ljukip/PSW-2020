@@ -39,7 +39,6 @@ namespace PSW_bolnica.model
 
         public virtual List<User> Patients { get; set; }
 
-        //public  string WorkingDays { get; set; }
 
     }
 }

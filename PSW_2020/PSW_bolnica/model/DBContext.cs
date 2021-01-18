@@ -24,6 +24,8 @@ namespace PSW_bolnica
 
         public DbSet<Referral> referral { get; set; }
 
+        public DbSet<Feedback> feedbacks { get; set; }
+
 
     }
 }

@@ -27,7 +27,7 @@ namespace PSW_bolnica.dao
             {
                 Id = referral.Id,
                 SpecialistId = referral.SpecialistId,
-                PatientId=referral.PatientId,
+                PatientId=referral.idOfPatient,
                 IsDeleted=referral.IsDeleted
             };
             return referralDao;
@@ -38,7 +38,7 @@ namespace PSW_bolnica.dao
             {
                 Id = referralDao.Id,
                 SpecialistId = referralDao.SpecialistId,
-                PatientId = referralDao.PatientId,
+                idOfPatient = referralDao.PatientId,
                 IsDeleted = referralDao.IsDeleted
             };
             return referral;

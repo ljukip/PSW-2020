@@ -38,8 +38,8 @@ namespace PSW_bolnica.migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<bool>("isCanceled")
+                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
@@ -77,6 +77,27 @@ namespace PSW_bolnica.migrations
                     b.ToTable("Doctor");
                 });
 
+            modelBuilder.Entity("PSW_bolnica.model.Feedback", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("isPublished")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("patientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("feedback");
+                });
+
             modelBuilder.Entity("PSW_bolnica.model.Referral", b =>
                 {
                     b.Property<int>("Id")
@@ -90,6 +111,9 @@ namespace PSW_bolnica.migrations
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("Patientid")
+                        .HasColumnType("int");
+
                     b.Property<int>("SpecialistId")
                         .HasColumnType("int");
 
@@ -98,12 +122,11 @@ namespace PSW_bolnica.migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId")
-                        .IsUnique();
+                    b.HasIndex("Patientid");
 
                     b.HasIndex("SpecialistId");
 
-                    b.ToTable("Referral");
+                    b.ToTable("referral");
                 });
 
             modelBuilder.Entity("PSW_bolnica.model.User", b =>
@@ -116,8 +139,14 @@ namespace PSW_bolnica.migrations
                     b.Property<int?>("DoctorId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ReferralId")
+                        .HasColumnType("int");
+
                     b.Property<string>("address")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("canceledAppointments")
+                        .HasColumnType("int");
 
                     b.Property<string>("gender")
                         .HasColumnType("nvarchar(max)");
@@ -168,10 +197,8 @@ namespace PSW_bolnica.migrations
             modelBuilder.Entity("PSW_bolnica.model.Referral", b =>
                 {
                     b.HasOne("PSW_bolnica.model.User", "Patient")
-                        .WithOne("Referral")
-                        .HasForeignKey("PSW_bolnica.model.Referral", "PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("Patientid");
 
                     b.HasOne("PSW_bolnica.model.Doctor", "Specialist")
                         .WithMany("Referrals")
