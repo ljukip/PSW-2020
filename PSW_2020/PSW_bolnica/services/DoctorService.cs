@@ -129,19 +129,19 @@ namespace PSW_bolnica.services
             return doctor;
         }
 
-       /* public DoctorDao GetSpecialist(int patientId)
-        {
-            User patient = dbcontext.user.FirstOrDefault(patient => patient.id == patientId);
+        /* public DoctorDao GetSpecialist(int patientId)
+         {
+             User patient = dbcontext.user.FirstOrDefault(patient => patient.id == patientId);
 
-            if (patient == null || patient.ReferralId == null)
-                return null;
+             if (patient == null || patient.ReferralId == null)
+                 return null;
 
-            Doctor doctor = dbcontext.doctors.FirstOrDefault(doc => doc.Speciality == patient.Referral.Speciality);
+             Doctor doctor = dbcontext.doctors.FirstOrDefault(doc => doc.Speciality == patient.Referral.Speciality);
 
-            if (doctor == null)
-                return null;
+             if (doctor == null)
+                 return null;
 
-            return DoctorDao.DoctorToDoctorDao(doctor);
-        }*/
+             return DoctorDao.DoctorToDoctorDao(doctor);
+         }*/
     }
 }

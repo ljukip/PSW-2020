@@ -26,6 +26,8 @@ namespace PSW_bolnica
 
         public DbSet<Feedback> feedbacks { get; set; }
 
+        public DbSet<Perscription> perscriptions { get; set; }
+
 
     }
 }

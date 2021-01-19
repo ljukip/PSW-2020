@@ -43,6 +43,7 @@ Vue.component("listUsers", {
                             <button v-if="role==='ADMIN' && !user.isBlocked&& user.canceledAppointments>2" v-on:click= "block(user.id,user.username)"  class="buttonChoose" style="background-image: url('../images/block.png');"></button>
                             <button v-if="role==='ADMIN' && user.isBlocked && user.canceledAppointments>2"  class="buttonChoose" style="background-image: url('../images/blocked.svg');" disabled></button>
                             <button v-if="role==='DOCTOR' && user.ReferralId!='0'" v-on:click= "referr(user.speciality, user.id)">send referral</button>
+                            <button v-if="role==='DOCTOR'" v-on:click= "perscribe( user.id)">issue perscription</button>
                             <select v-if="role==='DOCTOR'" id='listOfSpecialities' v-model="user.speciality">
                                 <option disabled value="">Specialities</option>
                                 <option v-for="s in specialities">{{s}}</option>
@@ -65,6 +66,10 @@ Vue.component("listUsers", {
                 .then(Response => (this.users = Response.data));
 
             console.log(this.users);
+        },
+        perscribe(id) {
+            localStorage.setItem("patientId", id);
+            this.$router.push('/newPerscription');
         },
         referr(speciality, patientId) {
             Swal.fire({

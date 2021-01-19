@@ -10,6 +10,8 @@ const Appointments = { template: "<appointments></appointments>" }
 const Review = { template: "<review></review>" }
 const Users = { template: "<listUsers></listUsers>" }
 const Reviews = { template: "<reviews></reviews>" }
+const NewPerscription = { template: "<newPerscription></newPerscription>" }
+const Perscriptions = { template: "<perscriptions></perscriptions>" }
 
 const routes = [
   { path: "/", component: HomePage },
@@ -23,6 +25,8 @@ const routes = [
   { path: "/review", component: Review },
   { path: "/patients", component: Users },
   { path: "/reviews", component: Reviews },
+  { path: "/newPerscription", component: NewPerscription },
+  { path: "/perscriptions", component: Perscriptions }
 ];
 
 const router = new VueRouter({

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 
 namespace PSW_bolnica.model
 {
-    //[Table("Referral")]
     public class Referral
     {
         public int Id { get; set; }
