@@ -31,7 +31,7 @@ namespace PSW_bolnica.Controllers
         //add new user
         [HttpPost]
         [Route("/referral/create/{speciality}/{patientId}")]
-        public IActionResult Register(string speciality, string patientId)
+        public IActionResult Create(string speciality, string patientId)
         {
             int id = Int32.Parse(patientId);
             Referral referral = new Referral();

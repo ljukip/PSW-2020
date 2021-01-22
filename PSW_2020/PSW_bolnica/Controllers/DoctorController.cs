@@ -40,7 +40,7 @@ namespace PSW_bolnica.Controllers
 
         [HttpGet]
         [Route("/getSuggestions/{DateTimeFrom}/{DateTimeTo}/{priority}/{doctorId}")]
-        public IActionResult Get(DateTime DateTimeFrom, DateTime DateTimeTo, string priority, string doctorId)
+        public IActionResult GetS(DateTime DateTimeFrom, DateTime DateTimeTo, string priority, string doctorId)
         { 
             Debug.Write("in suggestions:" + doctorId +","+priority+","+DateTimeFrom);
             AppointmentDao appointment = service.GetSuggestions(DateTimeFrom, DateTimeTo, priority, doctorId);
@@ -51,15 +51,5 @@ namespace PSW_bolnica.Controllers
 
             return Ok(doctor);
         }
-
-       /* [HttpGet]
-        [Route("/getSpecialist/{patientId}")]
-        public IActionResult GetSpecialist(int patientId)
-        {
-            if (service.GetSpecialist(patientId) == null)
-                return NotFound();
-
-            return Ok(service.GetSpecialist(patientId));
-        }*/
     }
 }

@@ -17,7 +17,7 @@ Vue.component("top-header", {
       <a href="#/" v-if="!user.role" data-toggle="tooltip" title="home"><img  src="images/home.png" width="31" height="31"> </a>
       <a href="#/profileUser" v-if="user.role" data-toggle="tooltip" title="profile"><img  src="images/profile.png" width="31" height="31"> </a> 
       <a href="#/newAppointment" v-if="user.role==='PATIENT'" data-toggle="tooltip" title="appointments"><img  src="images/res.png" width="31" height="31"> </a> 
-      <a href="#/proba" v-if="user.role==='PATIENT'" data-toggle="tooltip" title="medical records"><img  src="images/prognosis.png" width="31" height="31"> </a>
+      <a href="#/appointments" v-if="user.role==='PATIENT'" data-toggle="tooltip" title="medical records"><img  src="images/prognosis.png" width="31" height="31"> </a>
       <a href="#" v-if="user.role ==='ADMIN'|| user.role=== 'HOST'" data-toggle="tooltip" title="users"><img  src="images/users.png" width="31" height="31"> </a>
       <p style='font-size:26px;float:left;font-family: cursive;color:#c41088;'><b>HospitalApp</b></p>
       <p style='font-size:26px;float:left;font-family:Brush Script MT;'>

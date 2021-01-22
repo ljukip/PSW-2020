@@ -24,7 +24,7 @@ namespace PSW_bolnica.services
                 return null;
             
             dbcontext.referral.Add(referral);
-            dbcontext.Entry(referral.Patient).Property(x => x.ReferralId).IsModified = true;
+            //dbcontext.Entry(referral.Patient).Property(x => x.ReferralId).IsModified = true;
             dbcontext.SaveChanges();
 
 

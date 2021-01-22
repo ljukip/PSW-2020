@@ -29,7 +29,7 @@ Vue.component("appointments", {
                             <td>{{appointment.doctor.name}}, {{appointment.doctor.surname}}</td>
                             <td>{{appointment.doctor.speciality}}</td>
                             <td>{{appointment.dateTimeFrom}}</td>
-                            <td><button class="buttonChoose" style="background-image: url('../images/cnc.png');" v-on:click= "cancel(appointment.id)" type="button"></button></td>
+                            <td><button class="buttonChoose" style="background-image: url('../images/cnc.png');" v-on:click= "cancel(appointment.id, appointment.dateTimeFrom)" type="button"></button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -68,32 +68,45 @@ Vue.component("appointments", {
     </div>
     `,
     methods: {
-        cancel(id) {
-            Swal.fire({
-                title: 'Are you sure you want to cancel the appointment?',
-                text: "Appointment will be canceled",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ffdff0',
-                cancelButtonColor: '#c41088',
-                confirmButtonText: 'Yes, Im sure!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    axios
-                        .put(`cancel/` + id)
-                        .then(Response => {
+        cancel(id, date) {
+            var today = new Date();
+            today.setDate(today.getDate() + 2);
+            if (today.toISOString() > date) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Cancelation time passed',
+                    text: 'You have less then 48h to the appointment!',
+                })
+            }
+            else {
+                Swal.fire({
+                    title: 'Are you sure you want to cancel the appointment?',
+                    text: "Appointment will be canceled",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ffdff0',
+                    cancelButtonColor: '#c41088',
+                    confirmButtonText: 'Yes, Im sure!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        axios
+                            .put(`cancel/` + id)
+                            .then(Response => {
 
-                            Swal.fire({
-                                position: 'top-end',
-                                icon: 'success',
-                                title: 'Appointment has been canceled!',
-                                showConfirmButton: false,
-                                timer: 3500
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Appointment has been canceled!',
+                                    showConfirmButton: false,
+                                    timer: 3500
+                                })
+                                setTimeout(() => window.location.reload(), 3500);
                             })
-                            setTimeout(() => window.location.reload(), 3500);
-                        })
-                }
-            })
+                    }
+                })
+            }
+
+
         },
         review() {
             this.$router.push('/review');

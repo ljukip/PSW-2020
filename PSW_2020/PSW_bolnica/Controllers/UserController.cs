@@ -63,8 +63,14 @@ namespace PSW_bolnica.Controllers
         [HttpGet("/getUsers")]
         public IActionResult Get()
         {
+            List<User> allUsers = new List<User>();
             List<User> result = new List<User>();
-            dbcontext.user.ToList().ForEach(user => result.Add(user));
+            dbcontext.user.ToList().ForEach(user => allUsers.Add(user));
+            foreach (User u in allUsers) {
+                if (u.role=="PATIENT") {
+                    result.Add(u);
+                }
+            }
 
             return Ok(result);
         }
@@ -102,27 +108,21 @@ namespace PSW_bolnica.Controllers
             else {
                 return NotFound();
             }
-               
-            
-
         }
 
+     [HttpPut]
+     [Route("/updateUser")]
 
-
-        //method for session verification
-
-        [HttpGet]
-        [Route("/methodx")]
-        [Authorize]
-        public IActionResult MethodX()
+        public IActionResult Update(User newUser)
         {
-           // string jsonUser = HttpContext.Session.GetString("SessionLoggedUser");
-            //User user = JsonConvert.DeserializeObject<User>(jsonUser);
+            User user = service.GetWithUsername(newUser.username);
+            service.Update(user, newUser);
 
-
-
-            return Ok("radi");
+            return Ok(user);
         }
+
+
+//method for session verification
         private string GenerateJWT(UserDao user)
         {
             if (user == null)
@@ -138,7 +138,9 @@ namespace PSW_bolnica.Controllers
                     JWTClaim("name", user.name),
                     JWTClaim("surname", user.surname),
                     JWTClaim("gender",user.gender),
-                    JWTClaim("role", user.role)
+                    JWTClaim("role", user.role),
+                    JWTClaim("address", user.address),
+                    JWTClaim("phoneNumber", user.phoneNumber)
                 }),
                 Expires = DateTime.UtcNow.AddHours(_configuration.GetValue<int>("AppSettings:JWT:Expire_Time_Hours")),
                 Issuer = _configuration["AppSettings:JWT:Issuer"],

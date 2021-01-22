@@ -11,6 +11,9 @@ Vue.component("profileUser", {
                 username: UserData.username,
                 password: '',
                 role: UserData.role,
+                address: UserData.address,
+                phoneNumber: UserData.phoneNumber
+
             },
             passwords: {
                 password1: '',
@@ -54,6 +57,21 @@ Vue.component("profileUser", {
                     </div>
                     <br>
                     <div>
+                    <div v-if="messageVal==='wrongAddress'" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong address format</div>
+                        <label class="label1">Address : </label> 
+                    </div>
+                    <div id="center">
+                        <input v-model="user.address" type="text" value="user.address" name="address" required>
+                    </div>
+                    <div>
+                        <div v-if="messageVal==='wrongPhoneNumber'" style="color:  #c41088;text-align: center;font-family: cursive;font-size: 21;">Wrong phone number format</div>
+                        <label class="label1">Phone number : </label> 
+                    </div>
+                <div id="center">
+                    <input v-model="user.phoneNumber" type="text" value="user.phoneNumber" name="phoneNumber" required>
+                </div>
+
+                    <div>
                         <label class="label1">Username : </label> 
                     </div>
                     <div id="center">
@@ -77,7 +95,7 @@ Vue.component("profileUser", {
                     </div>
                     <div v-if="messageVal==='wrongMatch'" style="color:  #c41055;text-align: center;font-family: cursive;font-size: 21;">Passwords do not match</div>
                     <div id="center" style="flex-direction: row;">
-                        <button class="button1" type="submit" v-on:click='save()'>Save</button> 
+                        <button class="button1" type="submit" v-on:click='save(user)'>Save</button> 
                         <button class="button1" type="button" v-on:click='cancel()' > Cancel</button> 
                     </div>
                 </div>
@@ -107,7 +125,7 @@ Vue.component("profileUser", {
             setTimeout(() => this.messageVal = '', 9000);
         },
 
-        save: function () {
+        save: function (user) {
             console.log("in save");
             if (this.user.name == '') {
                 console.log("wrong name");
@@ -126,10 +144,6 @@ Vue.component("profileUser", {
                 this.messageVal = 'wrongUsername';
                 setTimeout(() => this.messageVal = '', 6000);
             }
-            else if (this.user.password == '') {
-                this.messageVal = 'wrongPassword';
-                setTimeout(() => this.messageVal = '', 6000);
-            }
             else {
                 if (this.passwords.password2 != '' && this.passwords.password2 != this.passwords.password1) {
                     console.log("not a match");
@@ -140,7 +154,16 @@ Vue.component("profileUser", {
                     if (this.passwords.password2 != '') { this.user.password = sha512(this.passwords.password2) }
                     console.log("axois profile put username: " + this.user.username);
                     axios
-                        .put(`/profileUser/${this.username}`, this.user)
+                        .put('updateUser', {
+                            name: user.name,
+                            surname: user.surname,
+                            gender: user.gender,
+                            username: user.username,
+                            password: user.password1,
+                            role: user.role,
+                            address: user.address,
+                            phoneNumber: user.phoneNumber
+                        })
                         .then(Response => {
                             console.log("updated");
                             this.messageVal = 'SuccesfullUpdate';
@@ -153,6 +176,7 @@ Vue.component("profileUser", {
                                 showConfirmButton: false,
                                 timer: 3500
                             })
+                            this.$router.push('/homeUser');
                             setTimeout(() => window.location.reload(), 3500);
                         })
 

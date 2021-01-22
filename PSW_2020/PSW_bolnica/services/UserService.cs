@@ -57,5 +57,20 @@ namespace PSW_bolnica.services
         {
             return dbcontext.user.FirstOrDefault(u => u.username == username);
         }
+
+        public void Update(User oldUser, User newUser)
+        {
+            oldUser.name = newUser.name;
+            oldUser.surname = newUser.surname;
+            oldUser.address = newUser.address;
+            oldUser.phoneNumber = newUser.phoneNumber;
+            if (newUser.password != null)
+            {
+                oldUser.password = newUser.password;
+            }
+            oldUser.gender = newUser.gender;
+
+            dbcontext.SaveChanges();
+        }
     }
 }

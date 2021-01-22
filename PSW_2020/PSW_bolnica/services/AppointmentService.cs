@@ -21,11 +21,11 @@ namespace PSW_bolnica.services
         public List<AppointmentDao> getAppointments(int patientId) {
             List<AppointmentDao> appointments = new List<AppointmentDao>();
             //dbcontext.appointments.Select(x => AppointmentDao.AppointmentToAppointmentDao(x).PatientId==patientId ).ToList();
-            foreach (Appointment a in dbcontext.appointments)
+            foreach (Appointment appointment in dbcontext.appointments)
             {
-                if (a.PatientId == patientId) 
+                if (appointment.PatientId == patientId) 
                 {
-                    appointments.Add(AppointmentDao.AppointmentToAppointmentDao(a));
+                    appointments.Add(AppointmentDao.AppointmentToAppointmentDao(appointment));
                 }
             }
 

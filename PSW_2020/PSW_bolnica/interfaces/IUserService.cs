@@ -18,5 +18,7 @@ namespace PSW_bolnica.interfaces
         public User Block(int id);
 
         public User GetWithUsername(string username);
+
+        public void Update(User oldUser, User newUser);
     }
 }
