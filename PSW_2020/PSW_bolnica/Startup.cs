@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using PSW_bolnica.interfaces;
 using PSW_bolnica.services;

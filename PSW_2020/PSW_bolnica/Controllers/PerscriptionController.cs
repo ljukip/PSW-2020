@@ -6,6 +6,7 @@ using PSW_bolnica.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PSW_bolnica.Controllers
@@ -66,6 +67,17 @@ namespace PSW_bolnica.Controllers
             dbcontext.SaveChanges();
 
             return Ok(perscription);
+        }
+
+        [HttpPost]
+        [Route("/checkMedication/{therapy}")]
+        public IActionResult CheckMedication(string therapy)
+        {
+            //salje zahtev springu
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8080/request_medicine?medicine=" + therapy);
+
+            return Ok(request);
         }
     }
 }

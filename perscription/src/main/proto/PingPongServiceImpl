@@ -1,0 +1,15 @@
+@GrpcService
+    public class PingPongServiceImpl extends PingPongServiceGrpc.PingPongServiceImplBase {
+@Override
+    public void ping(
+    PingRequest request, StreamObserver<PongResponse> responseObserver) {
+String ping = new StringBuilder()
+    .append("pong")
+    .toString();
+    PongResponse response = PongResponse.newBuilder()
+    .setPong(ping)
+.build();
+    responseObserver.onNext(response);
+    responseObserver.onCompleted();
+    }
+    }

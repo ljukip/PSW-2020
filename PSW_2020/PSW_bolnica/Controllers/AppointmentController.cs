@@ -72,11 +72,5 @@ namespace PSW_bolnica.Controllers
 
             return Ok(apointments);
         }
-
-        //cancel appointment
-        public IActionResult cnc()
-        {
-            return View();
-        }
     }
 }

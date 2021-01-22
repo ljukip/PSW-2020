@@ -20,6 +20,7 @@ Vue.component("newPerscription", {
 
            <div id="center">
             <button class="button1" type="submit" v-on:click='perscribe()'>Submit</button> 
+            <button class="button1" type="button" v-on:click='checkMedication()'>request medication</button> 
             <button class="button1" v-on:click='cancel()' > Cancel</button> 
         </div>
         </form>
@@ -33,6 +34,31 @@ Vue.component("newPerscription", {
                 .post('newPerscription/' + UserData.username + '/' + this.patientId + '/' + this.perscription)
                 .then((responce) => this.succes(responce.data))
                 .catch(() => this.failed());
+
+        },
+        checkMedication() {
+            axios
+                .post('checkMedication/' + this.perscription)
+                .then((responce) => this.found(responce.data))
+                .catch(() => this.failed());
+        },
+        found(data) {
+            if (data1 = null) {
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: 'perscription is available',
+                    showConfirmButton: false,
+                    timer: 1400
+                })
+            }
+            else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Medication isnt available',
+                    text: 'Something went wrong!',
+                })
+            }
 
         },
         succes(data) {
